@@ -19,11 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "stm32f1xx_hal.h"
-#include "stm32f1xx_hal_adc.h"
-#include "stm32f1xx_hal_adc_ex.h"
-#include "stm32f1xx_hal_def.h"
-#include "stm32f1xx_hal_uart.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -102,14 +97,15 @@ int main(void)
   char message[20] = "";
 
   HAL_ADCEx_Calibration_Start(&hadc1);
+  HAL_ADC_Start(&hadc1);
+  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_ADC_Start(&hadc1);
-    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+
     value = HAL_ADC_GetValue(&hadc1);
     voltage = (value/4095.0)*3.3;
 
