@@ -23,6 +23,7 @@
 #include "adc.h"
 #include "stm32f1xx_hal_def.h"
 #include "usart.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -58,9 +59,9 @@ void MX_DMA_Init(void)
 
 /* USER CODE BEGIN 2 */
  void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
-  if (hadc = &hadc1) {
+  if (hadc == &hadc1) {
     sprintf(message, "%d %d %d %d",values[0],values[1],values[2],values[3]);
-    HAL_UART_Transmit(&huart2,message,strlen(message),HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart2,(uint8_t*)message,strlen(message),HAL_MAX_DELAY);
   }
  }
 /* USER CODE END 2 */
