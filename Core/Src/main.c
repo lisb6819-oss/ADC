@@ -100,16 +100,17 @@ int main(void)
   float voltage = 0.0;
 
   HAL_ADCEx_Calibration_Start(&hadc1);
-
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)values, 4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)values, 4);
+
     HAL_Delay(500);
-    
+    sprintf(message, "%d %d %d %d",values[0],values[1],values[2],values[3]);
+    HAL_UART_Transmit(&huart2,(uint8_t*)message,strlen(message),HAL_MAX_DELAY);
 
     // value = HAL_ADC_GetValue(&hadc1);
     // voltage = (value/4095.0)*3.3;
