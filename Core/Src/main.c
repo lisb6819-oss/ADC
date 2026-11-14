@@ -98,6 +98,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   float voltage = 0.0;
+  float verf;
+  float temperture;
 
   HAL_ADCEx_Calibration_Start(&hadc1);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)values, 4);
@@ -109,8 +111,13 @@ int main(void)
   {
 
     HAL_Delay(500);
-    sprintf(message, "%d %d %d %d",values[0],values[1],values[2],values[3]);
+    temperture = (1.43-(values[2]*3.3/4096))/0.0043 + 25;
+
+    verf = 1.2*4095.0/(float)values[3];
+    voltage = (values[0]/4095.0)*verf;
+    sprintf(message, "%d %d 片内温度：%.2f  %.2f %.2f ",values[0],values[1],temperture,verf,voltage);
     HAL_UART_Transmit(&huart2,(uint8_t*)message,strlen(message),HAL_MAX_DELAY);
+
 
     // value = HAL_ADC_GetValue(&hadc1);
     // voltage = (value/4095.0)*3.3;
