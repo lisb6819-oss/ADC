@@ -20,8 +20,15 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "dma.h"
+#include "adc.h"
+#include "stm32f1xx_hal_def.h"
+#include "usart.h"
+#include <stdio.h>
+#include <string.h>
 
 /* USER CODE BEGIN 0 */
+extern uint16_t values[4];
+extern char message[50];
 
 /* USER CODE END 0 */
 
@@ -50,6 +57,11 @@ void MX_DMA_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
-
+ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
+  if (hadc = &hadc1) {
+    sprintf(message, "%d %d %d %d",values[0],values[1],values[2],values[3]);
+    HAL_UART_Transmit(&huart2,message,strlen(message),HAL_MAX_DELAY);
+  }
+ }
 /* USER CODE END 2 */
 

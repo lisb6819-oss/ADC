@@ -20,11 +20,14 @@
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
+#include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal_adc.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 /* USER CODE END Includes */
@@ -47,6 +50,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+  uint16_t values[4] = {0};
+  char message[50] = "";
 
 /* USER CODE END PV */
 
@@ -94,26 +99,26 @@ int main(void)
   MX_ADC1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  int value = 0;
   float voltage = 0.0;
-  char message[20] = "";
 
   HAL_ADCEx_Calibration_Start(&hadc1);
-  HAL_ADC_Start(&hadc1);
-  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-    value = HAL_ADC_GetValue(&hadc1);
-    voltage = (value/4095.0)*3.3;
-
-    sprintf(message, "ADC: %d  %.2fV",value,voltage);
-    HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)values, 4);
     HAL_Delay(500);
+    
+
+    // value = HAL_ADC_GetValue(&hadc1);
+    // voltage = (value/4095.0)*3.3;
+
+    // sprintf(message, "ADC: %d  %.2fV",value,voltage);
+    // HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+    // HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
